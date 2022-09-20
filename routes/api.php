@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Article\ArticleController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,3 +28,12 @@ Route::group(['middleware' => 'api','prefix' => 'auth'],function ($router) {
     Route::post('me', [AuthController::class,'me']);
 
 });
+
+Route::namespace('Article')->middleware('auth:api')->group(function(){
+    Route::post('create-article',[ArticleController::class,'store']);
+    Route::patch('update-article/{slug}',[ArticleController::class,'update']);
+    Route::delete('delete-article/{slug}',[ArticleController::class,'destroy']);
+});
+
+Route::get('article/{slug}',[ArticleController::class,'show']);
+Route::get('articles',[ArticleController::class,'index']);
